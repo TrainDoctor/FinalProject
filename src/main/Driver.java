@@ -1,7 +1,6 @@
 package main;
 
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class Driver {
 
@@ -23,36 +22,58 @@ public class Driver {
 		Board example = new Board(exampleValues);
 		System.out.println(example.toString());
 		int selRow = -1, selCol = -1;
+		int value = -1;
 		while (!solved) {
 			String toParse;
 			int parsed = -1;
 			System.out.println("Select a row: ");
 			toParse = in.nextLine();
-			parsed = Integer.parseInt(toParse);
-			if (parsed > 0 && parsed <= 9)
-				selRow = parsed;
-			while (parsed <= 0 && parsed > 9 && !moveNext) {
-				System.out.println("Invalid row selection.");
-				System.out.println("Select a row: ");
-				toParse = in.nextLine();
+			if (toParse == "s") {
+				example.toString();
+			} else if(toParse != "s") {
 				parsed = Integer.parseInt(toParse);
-				if (parsed > 0 && parsed <= 9)
-					moveNext = true;
-				selRow = parsed;
+				if (parsed > 0 && parsed <= 9) {
+					System.out.println("Row Selected: " + Integer.toString(parsed));
+					selRow = parsed;
+				}
+				while (parsed <= 0 && parsed > 9 && !moveNext) {
+					System.out.println("Invalid row selection.");
+					System.out.println("Select a row: ");
+					toParse = in.nextLine();
+					if (toParse == "s") {
+						example.toString();
+					}
+					parsed = Integer.parseInt(toParse);
+					if (parsed > 0 && parsed <= 9) {
+						System.out.println("Row Selected: " + Integer.toString(parsed));
+						moveNext = true;
+					}
+					selRow = parsed;
+				}
+				moveNext = false;
 			}
-			moveNext = false;
 			System.out.println("Select a column: ");
 			toParse = in.nextLine();
+			if (toParse == "s") {
+				example.toString();
+			}
 			parsed = Integer.parseInt(toParse);
-			if (parsed > 0 && parsed <= 9)
+			if (parsed > 0 && parsed <= 9) {
+				System.out.println("Column Selected: " + Integer.toString(parsed));
 				selCol = parsed;
+			}
 			while (parsed <= 0 && parsed > 9 && !moveNext) {
 				System.out.println("Invalid column selection.");
 				System.out.println("Select a column: ");
 				toParse = in.nextLine();
+				if (toParse == "s") {
+					example.toString();
+				}
 				parsed = Integer.parseInt(toParse);
-				if (parsed > 0 && parsed <= 9)
+				if (parsed > 0 && parsed <= 9) {
+					System.out.println("Column Selected: " + Integer.toString(parsed));
 					moveNext = true;
+				}
 				selCol = parsed;
 			}
 			moveNext = false;
@@ -62,20 +83,28 @@ public class Driver {
 				System.out.println(example.toStringSelected(selRow, selCol));
 				System.out.println("Input a value for this square.");
 				toParse = in.nextLine();
+				if (toParse == "s") {
+					example.toString();
+				}
 				parsed = Integer.parseInt(toParse);
-				if (parsed <= 9)
-					selCol = parsed;
+				if (parsed > 0 && parsed <= 9) {
+					value = parsed;
+					System.out.println("Value Selected: " + Integer.toString(parsed));
+				}
 				while (parsed <= 0 && parsed > 9 && !moveNext) {
 					System.out.println("Invalid value, must be 1 to 9.");
 					System.out.println("Input a value: ");
 					toParse = in.nextLine();
+					if (toParse == "s") {
+						example.toString();
+					}
 					parsed = Integer.parseInt(toParse);
-					if (parsed > 0 && parsed <= 9)
+					if (parsed > 0 && parsed <= 9) {
 						moveNext = true;
-					example.setValue(parsed, selRow, selCol);
+						System.out.println("Value Input: " + Integer.toString(parsed));
+					}
+					example.setValue(value, selRow, selCol);
 					System.out.println(example.toStringSelected(selRow, selCol));
-					TimeUnit.SECONDS.sleep(5);
-					System.out.flush();
 					System.out.println(example.toString());
 				}
 				moveNext = false;
