@@ -18,18 +18,18 @@ public class Board {
 	}
 
 	public int getValue(int row, int col) {
-		return values[row][col];
+		return values[row-1][col-1];
 	}
 
 	public boolean isModable(int row, int col) {
-		return modifiable[row][col];
+		return modifiable[row-1][col-1];
 	}
 
 	public void setValue(int value, int row, int col) {
 		if (value <= 0 || value > 9)
 			System.out.println("ERROR: INVALID VALUE PASSED!");
 		else
-			values[row][col] = value;
+			values[row-1][col-1] = value;
 	}
 
 	public String toString() {
@@ -52,8 +52,10 @@ public class Board {
 
 		return out;
 	}
-
+	
 	public String toStringSelected(int row, int col) {
+		int rowOut = row-1;
+		int colOut = col-1;
 		String out = "";
 		String replacement = "?";
 		out += "|---|---|---||---|---|---||---|---|---|\n";
@@ -63,33 +65,33 @@ public class Board {
 					Integer.toString(values[x][2]), Integer.toString(values[x][3]), Integer.toString(values[x][4]),
 					Integer.toString(values[x][5]), Integer.toString(values[x][6]), Integer.toString(values[x][7]),
 					Integer.toString(values[x][8]) };
-			if (x == row) {
-				switch (col) {
-				case 1:
+			if (x == rowOut) {
+				switch (colOut) {
+				case 0:
 					outputs[0] = replacement;
 					break;
-				case 2:
+				case 1:
 					outputs[1] = replacement;
 					break;
-				case 3:
+				case 2:
 					outputs[2] = replacement;
 					break;
-				case 4:
+				case 3:
 					outputs[3] = replacement;
 					break;
-				case 5:
+				case 4:
 					outputs[4] = replacement;
 					break;
-				case 6:
+				case 5:
 					outputs[5] = replacement;
 					break;
-				case 7:
+				case 6:
 					outputs[6] = replacement;
 					break;
-				case 8:
+				case 7:
 					outputs[7] = replacement;
 					break;
-				case 9:
+				case 8:
 					outputs[8] = replacement;
 					break;
 				}
