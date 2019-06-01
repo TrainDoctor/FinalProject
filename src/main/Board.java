@@ -3,6 +3,8 @@ package main;
 public class Board {
 	private int[][] values = new int[9][9];
 	private boolean[][] modifiable = new boolean[9][9];
+	
+	public int whatever = -1;
 
 	public Board(int[][] board) {
 		for (int row = 0; row < 9; row++) {
