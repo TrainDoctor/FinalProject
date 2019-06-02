@@ -4,6 +4,10 @@ import java.util.Scanner;
 
 public class Driver {
 
+	public static void solved(Board boardIn) {
+		boardIn.checkSolved();
+	}
+	
 	public static void parseInfo(Board boardIn) {
 		boolean isParsed = false;
 		boolean moveNext = false;
@@ -92,20 +96,21 @@ public class Driver {
 		boolean parsed = false;
 		Scanner in = new Scanner(System.in);
 		String toParseOptions;
-		System.out.println("Input values in parentheseis for each option.\n"
-				+ "Display the current board (d) or change a value (c).");
+		System.out.println("Input the letters between the parentheseis for each option.\n"
+				+ "Display the current board (d), \nrepeat the rules (r) or change a value (c).");
 		System.out.println("Believe you've solved the board? Input (s)");
 		toParseOptions = in.nextLine();
 		if (!(toParseOptions.length() > 1)) {
 			if (toParseOptions.contains("d")) {
-				boardIn.toString();
-				return 3;
-			} else if (toParseOptions.contains("c")) {
 				return 0;
+			} else if (toParseOptions.contains("c")) {
+				return 1;
+			} else if (toParseOptions.contains("r")) {
+				return 2;
 			} else if (toParseOptions.contains("s")) {
-				// in.close();
-				// return 1;
-				// checkSolved(boardIn);
+				return 3;
+			} else if (toParseOptions.contains("o")) {
+				return -1;
 			} else {
 				System.out.println("Unknown option.");
 			}
@@ -119,12 +124,14 @@ public class Driver {
 				toParseOptions = in.nextLine();
 				if (!(toParseOptions.length() > 1)) {
 					if (toParseOptions.contains("d")) {
-						boardIn.toString();
-					} else if (toParseOptions.contains("c")) {
 						return 0;
-					} else if(toParseOptions.contains("s")) {
+					} else if (toParseOptions.contains("c")) {
 						return 1;
-					} else {					
+					} else if (toParseOptions.contains("s")) {
+						return 2;
+					} else if (toParseOptions.contains("o")) {
+						return -1;
+					} else {
 						System.out.println("Unknown option.");
 					}
 				}
@@ -135,25 +142,39 @@ public class Driver {
 
 	public static void main(String args[]) throws InterruptedException {
 		boolean solved = false;
-		boolean firstRun = true;
 		int selectedOption = -1;
 		int[][] exampleValues = new int[][] { { 0, 9, 0, 7, 0, 0, 8, 6, 0 }, { 0, 3, 1, 0, 0, 5, 0, 2, 0 },
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 7, 0, 5, 0, 0, 0, 6 }, { 0, 0, 0, 3, 0, 7, 0, 0, 0 },
 				{ 5, 0, 0, 0, 1, 0, 7, 0, 0 }, { 0, 0, 0, 0, 0, 0, 1, 0, 9 }, { 0, 2, 0, 6, 0, 0, 3, 5, 0 },
 				{ 0, 5, 4, 0, 0, 8, 0, 7, 0 }, };
 		Board example = new Board(exampleValues);
-		example.whatever = 0;
 		System.out.println(example.toString());
+		System.out.println("Sudoku: Each square must contain the numbers 1-9.");
+		System.out.println("No numbers can repeat within a single column or row.\n");
 		while (!solved) {
 			selectedOption = showOptions(example);
-			if(selectedOption == 0) {
+			switch (selectedOption) {
+			case -1:
+				example.runTest();
+				break;
+			case 0:
+				System.out.println(example.toString());
+				break;
+			case 1:
+				System.out.println(example.toString());
 				parseInfo(example);
-				selectedOption = showOptions(example);
+				break;
+			case 2:
+				System.out.println("Sudoku: Each square must contain the numbers 1-9.");
+				System.out.println("No numbers can repeat within a single column or row.\n");
+				break;
+			case 3:
+				solved(example);
+				break;
+			default:
+				break;
 			}
-			if(selectedOption == 1) {
-				selectedOption = showOptions(example);
-			}
-			
+
 		}
 	}
 }

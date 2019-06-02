@@ -1,10 +1,11 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Board {
 	private int[][] values = new int[9][9];
 	private boolean[][] modifiable = new boolean[9][9];
-	
-	public int whatever = -1;
 
 	public Board(int[][] board) {
 		for (int row = 0; row < 9; row++) {
@@ -20,18 +21,263 @@ public class Board {
 	}
 
 	public int getValue(int row, int col) {
-		return values[row-1][col-1];
+		return values[row - 1][col - 1];
 	}
 
 	public boolean isModable(int row, int col) {
-		return modifiable[row-1][col-1];
+		return modifiable[row - 1][col - 1];
 	}
 
 	public void setValue(int value, int row, int col) {
 		if (value <= 0 || value > 9)
 			System.out.println("ERROR: INVALID VALUE PASSED!");
 		else
-			values[row-1][col-1] = value;
+			values[row - 1][col - 1] = value;
+	}
+
+	// returns true if row has no duplicate numbers
+	private boolean checkRow(int rowNum) {
+		boolean out = true;
+		int[] row = new int[9];
+		for (int x = 0; x < 9; x++) {
+			row[x] = values[rowNum][x];
+		}
+		for (int x = 0; x < row.length - 1; x++) {
+			int indMin = x;
+			for (int a = x + 1; a < row.length; a++) {
+				if (row[a] < row[indMin]) {
+					indMin = a;
+				}
+			}
+			int temp = row[indMin];
+			row[indMin] = row[x];
+			row[x] = temp;
+		}
+		for (int x = 1; x < 8; x++) {
+			if (row[x] == row[x - 1]) {
+				out = false;
+			}
+			if (!out) {
+				return out;
+			}
+		}
+		return out;
+	}
+
+	private boolean checkColumn(int colNum) {
+		boolean out = true;
+		int[] col = new int[9];
+		for (int x = 0; x < 9; x++) {
+			col[x] = values[x][colNum];
+		}
+		for (int x = 0; x < col.length - 1; x++) {
+			int indMin = x;
+			for (int a = x + 1; a < col.length; a++) {
+				if (col[a] < col[indMin]) {
+					indMin = a;
+				}
+			}
+			int temp = col[indMin];
+			col[indMin] = col[x];
+			col[x] = temp;
+		}
+		for (int x = 1; x < 8; x++) {
+			if (col[x] == col[x - 1]) {
+				out = false;
+			}
+			if (!out) {
+				return out;
+			}
+		}
+		return out;
+	}
+
+	private boolean checkBox(int boxNum) {
+		boolean out = true;
+		int[] boxValues = new int[9];
+		int minCol = -1, minRow = -1, maxCol = -1, maxRow = -1;
+		int index = 0;
+		switch (boxNum) {
+		case 0:
+			minRow = 0;
+			maxRow = 2;
+			minCol = 0;
+			maxCol = 2;
+			break;
+		case 1:
+			minRow = 0;
+			maxRow = 2;
+			minCol = 3;
+			maxCol = 5;
+			break;
+		case 2:
+			minRow = 0;
+			maxRow = 2;
+			minCol = 6;
+			maxCol = 8;
+			break;
+		case 3:
+			minRow = 3;
+			maxRow = 5;
+			minCol = 0;
+			maxCol = 2;
+			break;
+		case 4:
+			minRow = 3;
+			maxRow = 5;
+			minCol = 3;
+			maxCol = 5;
+			break;
+		case 5:
+			minRow = 3;
+			maxRow = 5;
+			minCol = 6;
+			maxCol = 8;
+			break;
+		case 6:
+			minRow = 6;
+			maxRow = 8;
+			minCol = 0;
+			maxCol = 2;
+			break;
+		case 7:
+			minRow = 6;
+			maxRow = 8;
+			minCol = 3;
+			maxCol = 5;
+			break;
+		case 8:
+			minRow = 6;
+			maxRow = 8;
+			minCol = 6;
+			maxCol = 8;
+			break;
+		}
+		for (int row = minRow; row <= maxRow; row++) {
+			for (int col = minCol; col <= maxCol; col++) {
+				boxValues[index] = values[row][col];
+				index++;
+			}
+		}
+		for (int x = 0; x < boxValues.length - 1; x++) {
+			int indMin = x;
+			for (int a = x + 1; a < boxValues.length; a++) {
+				if (boxValues[a] < boxValues[indMin]) {
+					indMin = a;
+				}
+			}
+			int temp = boxValues[indMin];
+			boxValues[indMin] = boxValues[x];
+			boxValues[x] = temp;
+		}
+		for (int x = 1; x < 8; x++) {
+			if (boxValues[x] == boxValues[x - 1]) {
+				out = false;
+			}
+			if (!out) {
+				return out;
+			}
+		}
+		return out;
+	}
+
+	public void runTest() {
+		checkRow(0);
+		checkColumn(0);
+		checkBox(0);
+	}
+
+	private ArrayList<Integer> checkRows() {
+		ArrayList<Integer> rowsWithDupes = new ArrayList<Integer>();
+		boolean[] rowState = new boolean[9];
+		for (int i = 0; i < 9; i++) {
+			rowState[i] = checkColumn(i);
+		}
+		for (int i = 0; i < 9; i++) {
+			if (!rowState[i]) {
+				rowsWithDupes.add(i);
+			}
+		}
+		return rowsWithDupes;
+	}
+
+	private ArrayList<Integer> checkColumns() {
+		ArrayList<Integer> colsWithDupes = new ArrayList<Integer>();
+		boolean[] colState = new boolean[9];
+		for (int i = 0; i < 9; i++) {
+			colState[i] = checkColumn(i);
+		}
+		for (int i = 0; i < 9; i++) {
+			if (!colState[i]) {
+				colsWithDupes.add(i);
+			}
+		}
+		return colsWithDupes;
+	}
+
+	private ArrayList<Integer> checkBoxes() {
+		ArrayList<Integer> boxesWithDupes = new ArrayList<Integer>();
+		boolean[] boxState = new boolean[9];
+		for (int i = 0; i < 9; i++) {
+			boxState[i] = checkBox(i);
+		}
+		for (int i = 0; i < 9; i++) {
+			if (!boxState[i]) {
+				boxesWithDupes.add(i);
+			}
+		}
+		return boxesWithDupes;
+	}
+
+	private ArrayList<Integer>[] checkBoard() {
+		// reports -1, -1, -1 if board is solved
+		// reports 1-9, -1, -1 if a box has duplicate values, the 1-9 value representing
+		// the first detected box with duplicate values
+		// reports 1-9, 1-9, 0-1 if a row or col has duplicate values
+		// 3rd value = 0 means row, 3rd value = 1 means col
+		// int[] pos = {-1, -1, -1};
+		List<Integer>[] checks = new ArrayList[3];
+		// ArrayList<Integer>[] checks = new ArrayList<Integer>[3];
+		ArrayList<Integer> boxDupe = checkBoxes();
+		checks[0] = boxDupe;
+		ArrayList<Integer> rowDupe = checkRows();
+		checks[1] = rowDupe;
+		ArrayList<Integer> colDupe = checkColumns();
+		checks[2] = colDupe;
+		return (ArrayList<Integer>[]) checks;
+	}
+
+	public void checkSolved() {
+		ArrayList<Integer>[] boardStates = checkBoard();
+		String temp = "";
+		// provide responses for box states
+		temp = "Boxes: ";
+		for (int x = 0; x < boardStates[0].size(); x++) {
+			if (x < 8)
+				temp += Integer.toString((boardStates[0].get(x) + 1)) + ", ";
+			else
+				temp += "and " + Integer.toString((boardStates[0].get(x) + 1));
+		}
+		temp += " have duplicate values.";
+		System.out.println(temp);
+		temp = "Rows: ";
+		for (int x = 0; x < boardStates[1].size(); x++) {
+			if (x < 8)
+				temp += Integer.toString((boardStates[1].get(x) + 1)) + ", ";
+			else
+				temp += "and " + Integer.toString((boardStates[1].get(x) + 1));
+		}
+		temp += " have duplicate values.";
+		System.out.println(temp);
+		temp = "Columns: ";
+		for (int x = 0; x < boardStates[1].size(); x++) {
+			if (x < 8)
+				temp += Integer.toString((boardStates[2].get(x) + 1)) + ", ";
+			else
+				temp += "and " + Integer.toString((boardStates[2].get(x) + 1));
+		}
+		temp += " have duplicate values.";
+		System.out.println(temp);
 	}
 
 	public String toString() {
@@ -54,10 +300,10 @@ public class Board {
 
 		return out;
 	}
-	
+
 	public String toStringSelected(int row, int col) {
-		int rowOut = row-1;
-		int colOut = col-1;
+		int rowOut = row - 1;
+		int colOut = col - 1;
 		String out = "";
 		String replacement = "?";
 		out += "|---|---|---||---|---|---||---|---|---|\n";
