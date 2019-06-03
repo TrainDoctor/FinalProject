@@ -230,14 +230,8 @@ public class Board {
 	}
 
 	private ArrayList<Integer>[] checkBoard() {
-		// reports -1, -1, -1 if board is solved
-		// reports 1-9, -1, -1 if a box has duplicate values, the 1-9 value representing
-		// the first detected box with duplicate values
-		// reports 1-9, 1-9, 0-1 if a row or col has duplicate values
-		// 3rd value = 0 means row, 3rd value = 1 means col
-		// int[] pos = {-1, -1, -1};
 		List<Integer>[] checks = new ArrayList[3];
-		// ArrayList<Integer>[] checks = new ArrayList<Integer>[3];
+		//ArrayList<Integer>[] checks = new ArrayList<Integer>[3];
 		ArrayList<Integer> boxDupe = checkBoxes();
 		checks[0] = boxDupe;
 		ArrayList<Integer> rowDupe = checkRows();
@@ -247,37 +241,61 @@ public class Board {
 		return (ArrayList<Integer>[]) checks;
 	}
 
-	public void checkSolved() {
+	public boolean checkSolved() {
 		ArrayList<Integer>[] boardStates = checkBoard();
 		String temp = "";
+		boolean out = true;
+		boolean[] dupeValuesFound = { true, true, true };
 		// provide responses for box states
-		temp = "Boxes: ";
-		for (int x = 0; x < boardStates[0].size(); x++) {
-			if (x < 8)
-				temp += Integer.toString((boardStates[0].get(x) + 1)) + ", ";
-			else
-				temp += "and " + Integer.toString((boardStates[0].get(x) + 1));
+		if (!(boardStates[0].size() < 1)) {
+			dupeValuesFound[0] = false;
+			temp = "Boxes: ";
+			for (int x = 0; x < boardStates[0].size(); x++) {
+				if (x < 8)
+					temp += Integer.toString((boardStates[0].get(x) + 1)) + ", ";
+				else
+					temp += "and " + Integer.toString((boardStates[0].get(x) + 1));
+			}
+			temp += " have duplicate values.";
+			System.out.println(temp);
+		} else {
+			dupeValuesFound[0] = true;
 		}
-		temp += " have duplicate values.";
-		System.out.println(temp);
-		temp = "Rows: ";
-		for (int x = 0; x < boardStates[1].size(); x++) {
-			if (x < 8)
-				temp += Integer.toString((boardStates[1].get(x) + 1)) + ", ";
-			else
-				temp += "and " + Integer.toString((boardStates[1].get(x) + 1));
+		if (!(boardStates[1].size() < 1)) {
+			dupeValuesFound[1] = false;
+			temp = "Rows: ";
+			for (int x = 0; x < boardStates[1].size(); x++) {
+				if (x < 8)
+					temp += Integer.toString((boardStates[1].get(x) + 1)) + ", ";
+				else
+					temp += "and " + Integer.toString((boardStates[1].get(x) + 1));
+			}
+			temp += " have duplicate values.";
+			System.out.println(temp);
+		} else {
+			dupeValuesFound[1] = true;
 		}
-		temp += " have duplicate values.";
-		System.out.println(temp);
-		temp = "Columns: ";
-		for (int x = 0; x < boardStates[1].size(); x++) {
-			if (x < 8)
-				temp += Integer.toString((boardStates[2].get(x) + 1)) + ", ";
-			else
-				temp += "and " + Integer.toString((boardStates[2].get(x) + 1));
+		if (!(boardStates[2].size() < 1)) {
+			dupeValuesFound[2] = false;
+			temp = "Columns: ";
+			for (int x = 0; x < boardStates[2].size(); x++) {
+				if (x < 8)
+					temp += Integer.toString((boardStates[2].get(x) + 1)) + ", ";
+				else
+					temp += "and " + Integer.toString((boardStates[2].get(x) + 1));
+			}
+			temp += " have duplicate values.";
+			System.out.println(temp);
+		} else {
+			dupeValuesFound[2] = true;
 		}
-		temp += " have duplicate values.";
-		System.out.println(temp);
+		for (int i = 0; i < 3; i++) {
+			if (dupeValuesFound[i] != true) {
+				out = false;
+			}
+		}
+		System.out.println("");
+		return out;
 	}
 
 	public String toString() {
