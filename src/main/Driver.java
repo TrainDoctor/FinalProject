@@ -179,7 +179,7 @@ public class Driver {
 		return -1;
 	}
 
-	public static void main(String args[]) throws InterruptedException {
+	public static void boardThree() {
 		boolean solved = false;
 		int selectedOption = -1;
 		int[][] exampleValues = new int[][] { { 0, 9, 0, 7, 0, 0, 8, 6, 0 }, { 0, 3, 1, 0, 0, 5, 0, 2, 0 },
@@ -247,5 +247,70 @@ public class Driver {
 		if(solved) {
 			System.out.println("Puzzle solved!\nWell done.");
 		}
+	}
+	
+	
+	public static void boardTwo() {
+		boolean solved = false;
+		int selectedOption = -1;
+		int[][] boardValues = new int[][] { { 0, 4, 0, 8, 0, 5, 2, 0, 0 }, { 0, 2, 0, 0, 4, 0, 0, 5, 0 },
+				{ 5, 0, 0, 0, 0, 0, 0, 0, 4 }, { 0, 9, 0, 0, 0, 3, 1, 2, 0 }, { 1, 0, 6, 0, 7, 8, 0, 0, 3 },
+				{ 3, 7, 0, 9, 0, 4, 0, 8, 0 }, { 0, 0, 0, 0, 0, 6, 7, 0, 0 }, { 0, 0, 8, 3, 5, 9, 0, 1, 0 },
+				{ 0, 1, 9, 0, 0, 7, 6, 0, 0 }, };
+		Board example = new Board(boardValues);
+		System.out.println(example.toString());
+		System.out.println("Sudoku: Each square must contain the numbers 1-9.");
+		System.out.println("No numbers can repeat within a single column or row.\n");
+		while (!solved) {
+			selectedOption = showOptions(example);
+			switch (selectedOption) {
+			case -1:
+				example.runTest();
+				break;
+			case 0:
+				System.out.println(example.toString());
+				break;
+			case 1:
+				System.out.println(example.toString());
+				parseInfo(example);
+				break;
+			case 2:
+				System.out.println("Sudoku: Each square must contain the numbers 1-9.");
+				System.out.println("No numbers can repeat within a single column or row.\n");
+				break;
+			case 3:
+				solved = isSolved(example);
+				break;
+			default:
+				break;
+			case -2:
+				System.out.println("Are you sure you want to exit?\nEnter (e) to exit, or (c) to continue.");
+				Scanner in = new Scanner(System.in);
+				while (true) {
+					String toParse = in.nextLine();
+					if (!(toParse.length() > 1)) {
+						if (toParse.contains("e")) {
+							return;
+						} else if (toParse.contains("c")) {
+							System.out.println("Continuing.");
+							break;
+						} else {
+							System.out.println("Unknown option");
+						}
+					} else {
+						System.out.println("Unknown option");
+					}
+				}
+			}
+		}
+		if(solved) {
+			System.out.println("Puzzle solved!\nWell done.");
+		}
+	}
+	
+	public static void main(String args[]) throws InterruptedException {
+		//boardOne();
+		boardTwo();
+		boardThree();
 	}
 }
