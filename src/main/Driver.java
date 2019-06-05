@@ -69,6 +69,7 @@ public class Driver {
 			toParse = in.nextLine();
 			parsed = parseForNum(toParse);
 			if (parsed == -2) {
+				clear(boardIn);
 				return;
 			}
 			if (parsed > 0 && parsed <= 9) {
@@ -77,6 +78,7 @@ public class Driver {
 			}
 			while ((parsed < 1 || parsed > 9) && !moveNext) {
 				if (parsed == -2) {
+					clear(boardIn);
 					return;
 				}
 				clear(boardIn);
@@ -87,6 +89,7 @@ public class Driver {
 				toParse = in.nextLine();
 				parsed = parseForNum(toParse);
 				if (parsed == -2) {
+					clear(boardIn);
 					return;
 				}
 				if (parsed > 0 && parsed <= 9) {
@@ -125,7 +128,7 @@ public class Driver {
 			}
 			moveNext = false;
 			clear(boardIn);
-			System.out.println(boardIn.toString());
+			//System.out.println(boardIn.toString());
 			if (!boardIn.isModable(selRow, selCol)) {
 				System.out.println("This value has been set.");
 			} else {
@@ -169,6 +172,8 @@ public class Driver {
 				}
 				moveNext = false;
 			}
+			System.out.println("Press any key to proceed.");
+			String holdOpen = in.nextLine();
 		}
 	}
 
@@ -328,20 +333,23 @@ public class Driver {
 				System.out.println("No numbers can repeat within a single column or row.\n");
 				break;
 			case 3:
+				clear(example);
+				System.out.println(example.toString());
 				solved = isSolved(example);
 				break;
 			default:
 				break;
 			case -2:
-				System.out.println("Are you sure you want to exit?\nEnter (e) to exit, or (c) to continue.");
 				Scanner in = new Scanner(System.in);
 				while (true) {
+					System.out.println("Are you sure you want to exit?\nEnter (e) to exit, or (c) to continue.");
 					String toParse = in.nextLine();
 					if (!(toParse.length() > 1)) {
 						if (toParse.contains("e")) {
 							return;
 						} else if (toParse.contains("c")) {
 							System.out.println("Continuing.");
+							clear(example);
 							break;
 						} else {
 							System.out.println("Unknown option");

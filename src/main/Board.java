@@ -370,7 +370,7 @@ public class Board {
 				out += "|---|---|---||---|---|---||---|---|---|\n";
 			}
 		}
-		out += "\n";
+		//out += "\n";
 		return out;
 	}
 
