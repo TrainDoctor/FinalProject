@@ -314,7 +314,7 @@ public class Board {
 				out += "|---|---|---||---|---|---||---|---|---|\n";
 			}
 		}
-		out += "\n";
+		//out += "";
 
 		return out;
 	}

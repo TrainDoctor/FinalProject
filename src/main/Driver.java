@@ -1,9 +1,52 @@
 package main;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Driver {
 
+	public static boolean isInteger(String s) {
+	    return isInteger(s,10);
+	}
+
+	public static boolean isInteger(String s, int radix) {
+	    if(s.isEmpty()) return false;
+	    for(int i = 0; i < s.length(); i++) {
+	        if(i == 0 && s.charAt(i) == '-') {
+	            if(s.length() == 1) return false;
+	            else continue;
+	        }
+	        if(Character.digit(s.charAt(i),radix) < 0) return false;
+	    }
+	    return true;
+	}
+	
+	private static void clearScreen() throws IOException, InterruptedException {
+		new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+	}
+
+	private static void clear(Board boardIn) {
+		try {
+			clearScreen();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static int parseForNum(String in) {
+		int parsed = -5;
+		try {
+			parsed = Integer.parseInt(in);
+		} catch (Exception e) {
+			System.out.println("Input was not a number.");
+		}
+		return parsed;
+	}
+	
 	public static boolean isSolved(Board boardIn) {
 		boolean out = boardIn.checkSolved();
 		return out;
@@ -19,10 +62,12 @@ public class Driver {
 		while (!isParsed) {
 			String toParse;
 			int parsed = -1;
+			clear(boardIn);
+			System.out.println(boardIn.toString());
 			System.out.println("Select a row: ");
 			System.out.println("Exit any of these prompts by inputting: -2");
 			toParse = in.nextLine();
-			parsed = Integer.parseInt(toParse);
+			parsed = parseForNum(toParse);
 			if (parsed == -2) {
 				return;
 			}
@@ -34,11 +79,13 @@ public class Driver {
 				if (parsed == -2) {
 					return;
 				}
+				clear(boardIn);
+				System.out.println(boardIn.toString());
 				System.out.println("Invalid row selection.");
 				System.out.println("Select a row: ");
 				System.out.println("Exit any of these prompts by inputting: -2");
 				toParse = in.nextLine();
-				parsed = Integer.parseInt(toParse);
+				parsed = parseForNum(toParse);
 				if (parsed == -2) {
 					return;
 				}
@@ -49,11 +96,14 @@ public class Driver {
 				selRow = parsed;
 			}
 			moveNext = false;
+			clear(boardIn);
+			System.out.println(boardIn.toString());
 			System.out.println("Select a column: ");
 			System.out.println("Exit any of these prompts by inputting: -2");
 			toParse = in.nextLine();
-			parsed = Integer.parseInt(toParse);
+			parsed = parseForNum(toParse);
 			if (parsed == -2) {
+				clear(boardIn);
 				return;
 			}
 			if (parsed > 0 && parsed <= 9) {
@@ -61,13 +111,12 @@ public class Driver {
 				selCol = parsed;
 			}
 			while ((parsed < 1 || parsed > 9) && !moveNext) {
+				clear(boardIn);
 				System.out.println("Invalid column selection.");
 				System.out.println("Select a column: ");
 				System.out.println("Exit any of these prompts by inputting: -2");
-				parsed = Integer.parseInt(toParse);
-				if (parsed == -2) {
-					return;
-				}
+				toParse = in.nextLine();
+				parsed = parseForNum(toParse);
 				if (parsed > 0 && parsed <= 9) {
 					System.out.println("Column Selected: " + Integer.toString(parsed));
 					moveNext = true;
@@ -75,6 +124,8 @@ public class Driver {
 				selCol = parsed;
 			}
 			moveNext = false;
+			clear(boardIn);
+			System.out.println(boardIn.toString());
 			if (!boardIn.isModable(selRow, selCol)) {
 				System.out.println("This value has been set.");
 			} else {
@@ -82,15 +133,16 @@ public class Driver {
 				System.out.println("Input a value for this square.");
 				System.out.println("Exit any of these prompts by inputting: -2");
 				toParse = in.nextLine();
-				parsed = Integer.parseInt(toParse);
+				parsed = parseForNum(toParse);
 				if (parsed == -2) {
+					clear(boardIn);
 					return;
 				}
 				if (parsed > 0 && parsed <= 9) {
 					value = parsed;
 					System.out.println("Value Input: " + Integer.toString(parsed));
 					boardIn.setValue(value, selRow, selCol);
-					System.out.println(boardIn.toString());
+					//System.out.println(boardIn.toString());
 					System.out.println(
 							"Selected Positon: (" + Integer.toString(selRow) + "," + Integer.toString(selCol) + ")");
 					isParsed = true;
@@ -99,8 +151,9 @@ public class Driver {
 					System.out.println("Invalid value, must be 1 to 9.");
 					System.out.println("Input a value: ");
 					toParse = in.nextLine();
-					parsed = Integer.parseInt(toParse);
+					parsed = parseForNum(toParse);
 					if (parsed == -2) {
+						clear(boardIn);
 						return;
 					}
 					if (parsed > 0 && parsed <= 9) {
@@ -186,18 +239,12 @@ public class Driver {
 				{ 0, 0, 0, 0, 0, 0, 0, 0, 0 }, { 0, 0, 7, 0, 5, 0, 0, 0, 6 }, { 0, 0, 0, 3, 0, 7, 0, 0, 0 },
 				{ 5, 0, 0, 0, 1, 0, 7, 0, 0 }, { 0, 0, 0, 0, 0, 0, 1, 0, 9 }, { 0, 2, 0, 6, 0, 0, 3, 5, 0 },
 				{ 0, 5, 4, 0, 0, 8, 0, 7, 0 }, };
-		int[][] solvedValues = new int[][] { 
-				{ 2, 7, 1, 9, 5, 4, 6, 8, 3 }, 
-				{ 5, 9, 3, 6, 2, 8, 1, 4, 7 },
+		int[][] solvedValues = new int[][] { { 2, 7, 1, 9, 5, 4, 6, 8, 3 }, { 5, 9, 3, 6, 2, 8, 1, 4, 7 },
 				{ 4, 6, 8, 1, 3, 7, 2, 5, 9 },
-				
-				{ 7, 3, 6, 4, 1, 5, 8, 9, 2 }, 
-				{ 1, 5, 9, 8, 6, 2, 3, 7, 4 },
-				{ 8, 4, 2, 3, 7, 9, 5, 6, 1 },
-				
-				{ 9, 8, 5, 2, 4, 1, 7, 3, 6 }, 
-				{ 6, 1, 7, 5, 9, 3, 4, 2, 8 },
-				{ 3, 2, 4, 7, 8, 6, 9, 1, 5 } };
+
+				{ 7, 3, 6, 4, 1, 5, 8, 9, 2 }, { 1, 5, 9, 8, 6, 2, 3, 7, 4 }, { 8, 4, 2, 3, 7, 9, 5, 6, 1 },
+
+				{ 9, 8, 5, 2, 4, 1, 7, 3, 6 }, { 6, 1, 7, 5, 9, 3, 4, 2, 8 }, { 3, 2, 4, 7, 8, 6, 9, 1, 5 } };
 		Board example = new Board(exampleValues);
 		System.out.println(example.toString());
 		System.out.println("Sudoku: Each square must contain the numbers 1-9.");
@@ -209,6 +256,7 @@ public class Driver {
 				example.runTest();
 				break;
 			case 0:
+				clear(example);
 				System.out.println(example.toString());
 				break;
 			case 1:
@@ -244,12 +292,11 @@ public class Driver {
 				}
 			}
 		}
-		if(solved) {
+		if (solved) {
 			System.out.println("Puzzle solved!\nWell done.");
 		}
 	}
-	
-	
+
 	public static void boardTwo() {
 		boolean solved = false;
 		int selectedOption = -1;
@@ -268,6 +315,7 @@ public class Driver {
 				example.runTest();
 				break;
 			case 0:
+				clear(example);
 				System.out.println(example.toString());
 				break;
 			case 1:
@@ -275,7 +323,8 @@ public class Driver {
 				parseInfo(example);
 				break;
 			case 2:
-				System.out.println("Sudoku: Each square must contain the numbers 1-9.");
+				clear(example);
+				System.out.println("\nSudoku: Each square must contain the numbers 1-9.");
 				System.out.println("No numbers can repeat within a single column or row.\n");
 				break;
 			case 3:
@@ -303,14 +352,15 @@ public class Driver {
 				}
 			}
 		}
-		if(solved) {
+		if (solved) {
 			System.out.println("Puzzle solved!\nWell done.");
 		}
 	}
+
 	
 	public static void main(String args[]) throws InterruptedException {
-		//boardOne();
+		// boardOne();
 		boardTwo();
-		boardThree();
+		// boardThree();
 	}
 }
