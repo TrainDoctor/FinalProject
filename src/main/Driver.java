@@ -84,7 +84,7 @@ public class Driver {
 				clear(boardIn);
 				System.out.println(boardIn.toString());
 				System.out.println("Invalid row selection.");
-				System.out.println("Select a row: ");
+				System.out.println("Select a row, (1-9): ");
 				System.out.println("Exit any of these prompts by inputting: -2");
 				toParse = in.nextLine();
 				parsed = parseForNum(toParse);
@@ -133,7 +133,7 @@ public class Driver {
 				System.out.println("This value has been set.");
 			} else {
 				System.out.println(boardIn.toStringSelected(selRow, selCol));
-				System.out.println("Input a value for this square.");
+				System.out.println("Input a value for this square (1-9), then press enter.");
 				System.out.println("Exit any of these prompts by inputting: -2");
 				toParse = in.nextLine();
 				parsed = parseForNum(toParse);
@@ -172,7 +172,7 @@ public class Driver {
 				}
 				moveNext = false;
 			}
-			System.out.println("Press any key to proceed.");
+			System.out.println("Press the enter key to proceed.");
 			String holdOpen = in.nextLine();
 		}
 	}
