@@ -8,7 +8,7 @@ public class Board {
 	private boolean[][] modifiable = new boolean[9][9];
 
 	public Board(int[][] board) {
-		for (int row = 0; row < 9; row++) {
+		for (int row = 0; 	row < 9; row++) {
 			for (int col = 0; col < 9; col++) {
 				values[row][col] = board[row][col];
 				if (values[row][col] == 0) {
